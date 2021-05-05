@@ -6,37 +6,40 @@ import (
 )
 
 type Table struct {
-	matrix [3][3]uuid.UUID
-	winner uuid.UUID
+	matrix    [][]string
+	winner    string
 	lastMover uuid.UUID
-	players [2]uuid.UUID
+	players   [2]uuid.UUID
+}
+
+func emptyLine() []string {
+	var emptyLine []string
+	emptyLine = append(emptyLine, "0", "0", "0")
+	return emptyLine
 }
 
 func (xorzero *Table) init() {
 	xorzero.players[0] = uuid.Nil
 	xorzero.players[1] = uuid.Nil
 	xorzero.lastMover = uuid.Nil
-	xorzero.winner = uuid.Nil
-	for i := 0; i < len(xorzero.matrix); i++ {
-		for j := 0; j < len(xorzero.matrix); j++ {
-			xorzero.matrix[i][j] = uuid.Nil
-		}
-	}
+	xorzero.winner = "0"
+	xorzero.matrix = xorzero.matrix[:0]
+	xorzero.matrix = append(xorzero.matrix, emptyLine(), emptyLine(), emptyLine())
 }
 
-func (xorzero *Table) placeUnit(row int64, column int64, playerIndex uuid.UUID) {
+func (xorzero *Table) placeUnit(row int64, column int64, playerUuid uuid.UUID) {
 	var length = int64(len(xorzero.matrix))
-	var isInRange = (column <= length && row <= length ) && (column >= 0 && row >= 0)
-	var isNormalPlayer = !uuid.Equal(playerIndex, xorzero.lastMover)
-	var isPlayer = uuid.Equal(playerIndex, xorzero.players[0]) || uuid.Equal(playerIndex, xorzero.players[1])
-	log.Println(isNormalPlayer, isInRange, isPlayer, playerIndex)
+	var isInRange = (column <= length && row <= length) && (column >= 0 && row >= 0)
+	var isNormalPlayer = xorzero.checkPlayer(playerUuid)
+	var isPlayer = uuid.Equal(playerUuid, xorzero.players[0]) || uuid.Equal(playerUuid, xorzero.players[1])
 
-	if  isNormalPlayer && isInRange && isPlayer {
-		var isEmpty = uuid.Equal(xorzero.matrix[column][row], uuid.Nil)
+	log.Println(isNormalPlayer, playerUuid, xorzero.lastMover)
+	if isNormalPlayer && isInRange && isPlayer {
+		var isEmpty = xorzero.matrix[column][row] == "0"
 
 		if isEmpty {
-			xorzero.matrix[column][row] = playerIndex
-			xorzero.lastMover = playerIndex
+			xorzero.matrix[column][row] = xorzero.getPlayer(playerUuid)
+			xorzero.lastMover = playerUuid
 		}
 	}
 }
@@ -48,18 +51,29 @@ func (xorzero *Table) checkWinner() {
 	}
 	xorzero.checkRule(xorzero.matrix[0][0], xorzero.matrix[1][1], xorzero.matrix[2][2])
 	xorzero.checkRule(xorzero.matrix[0][2], xorzero.matrix[1][1], xorzero.matrix[2][0])
-
 }
 
 func (xorzero *Table) checkPlayer(from uuid.UUID) bool {
-	return uuid.Equal(xorzero.lastMover, from)
+	return !uuid.Equal(xorzero.lastMover, from)
 }
 
-func (xorzero *Table) checkRule(e1 uuid.UUID, e2 uuid.UUID, e3 uuid.UUID)  {
-	if uuid.Equal(e1, e2) && uuid.Equal(e2, e3) && !uuid.Equal(e1, uuid.Nil) { xorzero.winner = e1 }
+func (xorzero *Table) checkRule(e1 string, e2 string, e3 string) {
+	if e1 == e2 && e2 == e3 && e1 != "0" {
+		xorzero.winner = e1
+	}
 }
 
-func (xorzero *Table) giveSlot() uuid.UUID  {
+func (xorzero *Table) getPlayer(from uuid.UUID) string {
+	if uuid.Equal(xorzero.players[0], from) {
+		return "1"
+	}
+	if uuid.Equal(xorzero.players[1], from) {
+		return "2"
+	}
+	return "0"
+}
+
+func (xorzero *Table) giveSlot() uuid.UUID {
 	myuuid, _ := uuid.NewV4()
 	if uuid.Equal(xorzero.players[0], uuid.Nil) {
 		xorzero.players[0] = myuuid
