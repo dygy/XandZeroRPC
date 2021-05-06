@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	uuid "github.com/satori/go.uuid"
 	"io"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -26,10 +25,6 @@ func parseHeader(r *http.Request) *Request {
 }
 
 func RPC(w http.ResponseWriter, req *Request, xorzero *Table) {
-	if xorzero.winner != "0" && req.request != "refresh" {
-		GETTable(w, xorzero)
-		return
-	}
 
 	switch req.request {
 	case "GETTable":
@@ -40,6 +35,8 @@ func RPC(w http.ResponseWriter, req *Request, xorzero *Table) {
 		refresh(xorzero, req)
 	case "giveSlot":
 		giveSlot(w, xorzero)
+	case "checkUUID":
+		checkUUID(w, xorzero, req)
 	default:
 		w.Write([]byte(`{"hello": "hello"}`))
 	}
@@ -74,6 +71,11 @@ func giveSlot(w http.ResponseWriter, xorzero *Table) {
 	w.Write([]byte(slot))
 }
 
+func checkUUID(w http.ResponseWriter, xorzero *Table, req *Request) {
+	var checker = xorzero.checkLobby(req.id)
+	w.Write([]byte(strconv.FormatBool(checker)))
+}
+
 func parsePlace(w http.ResponseWriter, req *Request, xorzero *Table) {
 	var array = strings.Split(req.action, "")
 	column, _ := strconv.ParseInt(array[1], 10, 64)
@@ -92,7 +94,6 @@ func Cors(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,access-control-allow-origin, access-control-allow-headers, request, action, id")
 	var req = parseHeader(r)
-	log.Println(req.action)
 
 	RPC(w, req, xorzero)
 }
