@@ -1,0 +1,27 @@
+{
+  "name": "xandzerorpc",
+  "version": "1.0.0",
+  "description": "x and zero rpc golang back",
+  "main": "index.go",
+  "scripts": {
+    "setup": "vercel login && vercel link",
+    "start": "vercel dev",
+    "dev": "npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dygy/XandZeroRPC.git"
+  },
+  "keywords": [
+    "go"
+  ],
+  "author": "dygy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dygy/XandZeroRPC/issues"
+  },
+  "homepage": "https://github.com/dygy/XandZeroRPC#readme",
+  "dependencies": {
+    "vercel": "^33.4.1"
+  }
+}

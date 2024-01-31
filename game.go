@@ -1,7 +1,6 @@
-package main
+package Main
 
 import (
-	"github.com/satori/go.uuid"
 	"log"
 )
 
