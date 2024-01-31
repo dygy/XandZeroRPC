@@ -4,8 +4,8 @@
   "description": "x and zero rpc golang back",
   "main": "index.js",
   "scripts": {
-    "setup": "npm vercel login && npm vercel link",
-    "start": "npm vercel dev",
+    "setup": "vercel login && vercel link",
+    "start": "vercel dev",
     "dev": "npm start"
   },
   "repository": {
