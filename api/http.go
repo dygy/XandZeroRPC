@@ -1,4 +1,4 @@
-package Main
+package main
 
 import (
 	"encoding/json"
@@ -24,7 +24,7 @@ func parseHeader(r *http.Request) *Request {
 	return request
 }
 
-func RPC(w http.ResponseWriter, req *Request, xorzero *Table) {
+func rpc(w http.ResponseWriter, req *Request, xorzero *Table) {
 
 	switch req.request {
 	case "GETTable":
@@ -95,5 +95,5 @@ func Cors(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,access-control-allow-origin, access-control-allow-headers, request, action, id")
 	var req = parseHeader(r)
 
-	RPC(w, req, xorzero)
+	rpc(w, req, xorzero)
 }

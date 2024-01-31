@@ -1,6 +1,7 @@
-package Main
+package main
 
 import (
+	uuid "github.com/satori/go.uuid"
 	"log"
 )
 
@@ -81,7 +82,7 @@ func (xorzero *Table) getPlayer(from uuid.UUID) string {
 }
 
 func (xorzero *Table) giveSlot() uuid.UUID {
-	myuuid, _ := uuid.NewV4()
+	myuuid := uuid.NewV4()
 	if uuid.Equal(xorzero.players[0], uuid.Nil) {
 		xorzero.players[0] = myuuid
 		return myuuid

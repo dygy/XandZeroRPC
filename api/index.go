@@ -1,4 +1,4 @@
-package Main
+package main
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 
 var xorzero = new(Table)
 
-func Main() {
+func main() {
 	xorzero.init()
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/", Cors)
