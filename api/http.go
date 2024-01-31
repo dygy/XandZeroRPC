@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	uuid "github.com/satori/go.uuid"
 	"io"
 	"net/http"
@@ -28,7 +29,7 @@ func rpc(w http.ResponseWriter, req *Request, xorzero *Table) {
 
 	switch req.request {
 	case "GETTable":
-		GETTable(w, xorzero)
+		getTable(w, xorzero)
 	case "placeUnit":
 		parsePlace(w, req, xorzero)
 	case "refresh":
@@ -54,7 +55,7 @@ func matrixToString(matrix [][]string) string {
 	return string + "]"
 }
 
-func GETTable(w http.ResponseWriter, xorzero *Table) {
+func getTable(w http.ResponseWriter, xorzero *Table) {
 	result, _ := json.Marshal(
 		"{\"winner\":" + xorzero.winner + ",\"matrix\":" + matrixToString(xorzero.matrix) + "}")
 	io.WriteString(w, string(result))
@@ -86,5 +87,9 @@ func parsePlace(w http.ResponseWriter, req *Request, xorzero *Table) {
 		req.id,
 	)
 	xorzero.checkWinner()
-	GETTable(w, xorzero)
+	getTable(w, xorzero)
+}
+
+func HTTPmockHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "<h1>HTTPmockHandler</h1>")
 }

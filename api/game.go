@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	uuid "github.com/satori/go.uuid"
 	"log"
+	"net/http"
 )
 
 type Table struct {
@@ -93,4 +95,8 @@ func (xorzero *Table) giveSlot() uuid.UUID {
 	} else {
 		return myuuid
 	}
+}
+
+func Handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "<h1>Handler</h1>")
 }
