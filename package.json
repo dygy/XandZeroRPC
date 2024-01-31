@@ -20,8 +20,5 @@
   "bugs": {
     "url": "https://github.com/dygy/XandZeroRPC/issues"
   },
-  "homepage": "https://github.com/dygy/XandZeroRPC#readme",
-  "dependencies": {
-    "vercel": "^33.4.1"
-  }
+  "homepage": "https://github.com/dygy/XandZeroRPC#readme"
 }

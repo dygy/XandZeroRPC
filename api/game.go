@@ -1,7 +1,10 @@
-package Main
+package handler
 
 import (
+	"fmt"
+	uuid "github.com/satori/go.uuid"
 	"log"
+	"net/http"
 )
 
 type Table struct {
@@ -81,7 +84,7 @@ func (xorzero *Table) getPlayer(from uuid.UUID) string {
 }
 
 func (xorzero *Table) giveSlot() uuid.UUID {
-	myuuid, _ := uuid.NewV4()
+	myuuid := uuid.NewV4()
 	if uuid.Equal(xorzero.players[0], uuid.Nil) {
 		xorzero.players[0] = myuuid
 		return myuuid
@@ -92,4 +95,8 @@ func (xorzero *Table) giveSlot() uuid.UUID {
 	} else {
 		return myuuid
 	}
+}
+
+func Handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "<h1>Handler</h1>")
 }

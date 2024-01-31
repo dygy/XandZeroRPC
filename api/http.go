@@ -1,7 +1,8 @@
-package Main
+package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	uuid "github.com/satori/go.uuid"
 	"io"
 	"net/http"
@@ -24,11 +25,11 @@ func parseHeader(r *http.Request) *Request {
 	return request
 }
 
-func RPC(w http.ResponseWriter, req *Request, xorzero *Table) {
+func rpc(w http.ResponseWriter, req *Request, xorzero *Table) {
 
 	switch req.request {
 	case "GETTable":
-		GETTable(w, xorzero)
+		getTable(w, xorzero)
 	case "placeUnit":
 		parsePlace(w, req, xorzero)
 	case "refresh":
@@ -54,7 +55,7 @@ func matrixToString(matrix [][]string) string {
 	return string + "]"
 }
 
-func GETTable(w http.ResponseWriter, xorzero *Table) {
+func getTable(w http.ResponseWriter, xorzero *Table) {
 	result, _ := json.Marshal(
 		"{\"winner\":" + xorzero.winner + ",\"matrix\":" + matrixToString(xorzero.matrix) + "}")
 	io.WriteString(w, string(result))
@@ -86,14 +87,9 @@ func parsePlace(w http.ResponseWriter, req *Request, xorzero *Table) {
 		req.id,
 	)
 	xorzero.checkWinner()
-	GETTable(w, xorzero)
+	getTable(w, xorzero)
 }
 
-func Cors(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=ascii")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type,access-control-allow-origin, access-control-allow-headers, request, action, id")
-	var req = parseHeader(r)
-
-	RPC(w, req, xorzero)
+func HTTPmockHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "<h1>HTTPmockHandler</h1>")
 }
