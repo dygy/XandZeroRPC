@@ -8,10 +8,11 @@ import (
 )
 
 type Table struct {
-	matrix    [][]string
-	winner    string
-	lastMover uuid.UUID
-	players   [2]uuid.UUID
+	matrix        [][]string
+	winner        string
+	lastMover     uuid.UUID
+	players       [2]uuid.UUID
+	isInitialised bool
 }
 
 func emptyLine() []string {
@@ -27,6 +28,7 @@ func (xorzero *Table) init() {
 	xorzero.winner = "0"
 	xorzero.matrix = xorzero.matrix[:0]
 	xorzero.matrix = append(xorzero.matrix, emptyLine(), emptyLine(), emptyLine())
+	xorzero.isInitialised = true
 }
 
 func (xorzero *Table) placeUnit(row int64, column int64, playerUuid uuid.UUID) {
