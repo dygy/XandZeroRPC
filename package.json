@@ -2,7 +2,7 @@
   "name": "xandzerorpc",
   "version": "1.0.0",
   "description": "x and zero rpc golang back",
-  "main": "index.js",
+  "main": "index.go",
   "scripts": {
     "setup": "vercel login && vercel link",
     "start": "vercel dev",
