@@ -1,18 +1,15 @@
-package handler
+package main
 
 import (
-	"fmt"
-	uuid "github.com/satori/go.uuid"
+	"github.com/satori/go.uuid"
 	"log"
-	"net/http"
 )
 
 type Table struct {
-	matrix        [][]string
-	winner        string
-	lastMover     uuid.UUID
-	players       [2]uuid.UUID
-	isInitialised bool
+	matrix    [][]string
+	winner    string
+	lastMover uuid.UUID
+	players   [2]uuid.UUID
 }
 
 func emptyLine() []string {
@@ -28,7 +25,6 @@ func (xorzero *Table) init() {
 	xorzero.winner = "0"
 	xorzero.matrix = xorzero.matrix[:0]
 	xorzero.matrix = append(xorzero.matrix, emptyLine(), emptyLine(), emptyLine())
-	xorzero.isInitialised = true
 }
 
 func (xorzero *Table) placeUnit(row int64, column int64, playerUuid uuid.UUID) {
@@ -97,8 +93,4 @@ func (xorzero *Table) giveSlot() uuid.UUID {
 	} else {
 		return myuuid
 	}
-}
-
-func Handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "<h1>Handler</h1>")
 }
